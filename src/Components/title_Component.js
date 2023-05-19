@@ -1,14 +1,18 @@
 import {
     Image, Box, Stack, Input, Button, Spacer, Flex, Table,
-    Thead, Tbody, Tr, Th, Td, TableContainer, Heading
+    Thead, Tbody, Tr, Th, Td, TableContainer, Heading, useColorModeValue
 } from '@chakra-ui/react'
 import data from "../table_Temp_Data.json"
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react"
+import ColorModeButton from "./colorModeButton";
 
 // Title page component.
 function TitleComponent() {
 
-    const darkmode = false;
+    // Color Mode Variables
+    const backgroundColor = useColorModeValue("white", "#1A202C")
+    const titleTextImage = useColorModeValue("kuick_Key_Title.png", "kuick_Key_Title_DM.png")
+    const darkmode = useColorModeValue(false, true)
 
     const topSX = !darkmode ? {
         textAlign: "center",
@@ -20,15 +24,13 @@ function TitleComponent() {
             textAlign: "center",
             fontWeight: "bold",
             color: "red",
-            textShadow: "1px 1px white"
     }
 
     const [leaderBoard, setUsers] = useState([])
 
-    // useEffect(() => {
-    //     setUsers(data)
-    //     console.log(data)
-    // }, [])
+    useEffect(() => {
+        console.log(titleTextImage)
+    }, [backgroundColor])
 
     return (
         <Box className={"Title"} >
@@ -36,12 +38,12 @@ function TitleComponent() {
                 <Spacer />
                 <Box h={"100vh"}
                      overflow={"hidden"}>
-                    <Image src={"title_Letters_Left.png"} />
+                    <Image src={"title_Letters_Left.png"} alt={"Background Image"} h={"100%"} w={"855px"} />
                 </Box>
                 <Spacer/>
                 <Stack align={"center"} >
                     <Box>
-                        <Image src={"kuick_Key_Title.png"} alt='Game Title Text' />
+                        <Image src={titleTextImage} alt='Game Title Text' />
                     </Box>
                     <Spacer/>
                     <Heading size={"md"} color={"tomato"}>Enter a user name for the leaderboard!</Heading>
@@ -51,14 +53,17 @@ function TitleComponent() {
                            w={"sm"}
                            focusBorderColor={"red.400"} />
                     <Spacer/>
-                    <Button colorScheme={"red"} w={"2xs"}>
-                        Find Game!
-                    </Button>
+                    <Stack isInline>
+                        <Button colorScheme={"red"} w={"2xs"}>
+                            Find Game!
+                        </Button>
+                        <ColorModeButton />
+                    </Stack>
                     <Spacer />
                     <TableContainer position={"absolute"}
                                     left={"20%"}
                                     top={"30%"}
-                                    background={"white"}
+                                    background={backgroundColor}
                                     border={"4px"}
                                     p={"5"}
                                     boxShadow={"dark-lg"}
