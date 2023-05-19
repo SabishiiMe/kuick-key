@@ -1,14 +1,13 @@
 ![Kuick Key title logo text](./public/kuick_Key_Title.png)
 
-### Web App designed by Zachary Rowley
-
-### Developed using [React](https://react.dev) and [Chakra](https://chakra-ui.com) UI
+### Web App designed by [Zachary Rowley](https://www.portfolio2000.ca)
 
 <br />
 
 # Getting Started
 
-You can navigate to [Kuick Key](kuick-key.ca) to play the currently deployed Kuick Key.__ 
+You can navigate to [Kuick Key](kuick-key.ca) to play the currently deployed Kuick Key.
+
 *Note: This game is only playable on desktop.*
 
 <br />
@@ -53,12 +52,19 @@ You can now create a new project by clicking the New Project Button located on t
 ![Create new project instructional Image](./public/README/Installation_Steps/1newProject.png)
 ![Create new project instructional Image](./public/README/Installation_Steps/2newProject.png)
 
+Next you will want to navigate to the [App Engine](https://console.cloud.google.com/appengine/start) item in from your **Google Cloud bashboard**. You can find this item by clicking on the **hamburger** icon on the **top right** of your Google Cloud window
 
-Now we can clone the newest release of the program from [Github](https://github.com/SabishiiMe/kuick-key.git)
+![Google Cloud dashboard hamburger navigation symbol](./public/README/Installation_Steps/1findAppEngine.png)
+
+This will open a pop out window. Click the **More Products** button and scroll down to the **Serverless**.
+
+![Google Cloud dashboard navigation pop up window](./public/README/Installation_Steps/2findAppEngine.png)
+
+Now you can clone the newest release of the program from [Github](https://github.com/SabishiiMe/kuick-key.git)
 
 Now open your web development IDE of your choice and navigate to the cloned project directory.
 
-Finally we can run the following commands inside the cloned directory:
+Finally you can run the following commands inside the cloned directory:
 ```
 npm install
 
@@ -66,3 +72,10 @@ gcloud init
 ```
 
 *Gcloud Init will prompt you to enter in your account info, create a new configuration, and set the cloned software to the Google Cloud Project you created.*
+
+
+## Tech Stack
+
+**Client:** [React](https://react.dev), [React Router](https://reactrouter.com/en/main), [Chakra UI](https://chakra-ui.com), 
+
+**Server:** [Node js](https://nodejs.org/en), [Google Cloud](https://cloud.google.com)
