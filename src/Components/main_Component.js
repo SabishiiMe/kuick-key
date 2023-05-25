@@ -1,7 +1,6 @@
 import {
     Image, Box, Stack, Input, Button, Spacer, Flex, Table,
-    Thead, Tbody, Tr, Th, TableContainer, Heading, useColorModeValue,
-    InputGroup, InputLeftAddon, Icon
+    Thead, Tbody, Tr, Th, TableContainer, Heading, useColorModeValue
 } from '@chakra-ui/react'
 import data from "../table_Temp_Data.json"
 import ColorModeButton from "./colorModeButton";
@@ -10,13 +9,11 @@ import LeftPlayer from './player_Left_Component';
 import React, { useState } from 'react';
 import RightPlayer from './player_Right_Component';
 import ChatEntry from './chat_Entry_Component';
-import { render } from '@testing-library/react';
-import { createRoot } from "react-dom/client"
 
 import "../Styles/misc_Stylesheet.css"
 
 
-// Title page component.
+// Main window component.
 function MainComponent() {
 
     // Color Mode Variables
@@ -108,23 +105,80 @@ function MainComponent() {
                         <Image src={titleTextImage} alt='Game Title Text' />
                     </Box>
                     <Spacer/>
-                    <Heading size={"md"} color={"tomato"}>Enter a user name for the leaderboard!</Heading>
-                    <Input placeholder={"Username"}
-                           color={"tomato"}
-                           maxLength={14}
-                           _placeholder={{color: "red.400"}}
-                           w={"sm"}
-                           onChange={(e) => {setUsername(e.target.value)}}
-                           focusBorderColor={"red.400"} />
+                    <Heading size={"md"} color={"tomato"}>Enter a username, colour, and image for the leaderboard!</Heading>
+                    <Stack isInline >
+                        <Input placeholder={"Username"}
+                            color={"tomato"}
+                            maxLength={14}
+                            _placeholder={{color: "red.400"}}
+                            w={"150px"}
+                            onChange={(e) => {setUsername(e.target.value)}}
+                            focusBorderColor={"red.400"} />
+                        <Input type={"color"} 
+                               w={"70px"}
+                               onChange={(e) => {setUserColor(e.target.value)}} />
+                        <Input type={"file"} w={"auto"} />
+                    </Stack>
                     <Spacer/>
                     <Heading size={"md"} color={"tomato"}>Enter a 4 digit session number to join a session!</Heading>
-                    <Input placeholder={"Session Number"}
-                            color={"tomato"}
-                            type={"text"}
-                            maxLength={4}
-                            _placeholder={{color: "red.400"}}
-                            w={"sm"}
-                            focusBorderColor={"red.400"} />
+                    <Stack isInline >
+                        <Input placeholder={"0"}
+                                color={"tomato"}
+                                type={"text"}
+                                maxLength={1}
+                                id={"sessionOne"}
+                                _placeholder={{color: "red.400"}}
+                                w={"45px"}
+                                focusBorderColor={"red.400"}
+                                onChange={(e) => {
+                                    if (!isNaN(e.target.value) && e.target.value !== "" && e.target.value !== " ")
+                                    { setSession(e.target.value + session.substring(1)) } else 
+                                    { setSession("0" + session.substring(1)) }
+                                }}
+                                />
+                        <Input placeholder={"0"}
+                                color={"tomato"}
+                                type={"text"}
+                                maxLength={1}
+                                id={"sessionTwo"}
+                                _placeholder={{color: "red.400"}}
+                                w={"45px"}
+                                focusBorderColor={"red.400"} 
+                                onChange={(e) => {
+                                    if (!isNaN(e.target.value) && e.target.value !== "" && e.target.value !== " ")
+                                    { setSession(session.substring(0, 1) + e.target.value + session.substring(2)) } else
+                                    { setSession(session.substring(0, 1) + "0" + session.substring(2)) }
+                                }}
+                                />
+                        <Input placeholder={"0"}
+                                color={"tomato"}
+                                type={"text"}
+                                id={"sessionThree"}
+                                maxLength={1}
+                                _placeholder={{color: "red.400"}}
+                                w={"45px"}
+                                focusBorderColor={"red.400"} 
+                                onChange={(e) => {
+                                    if (!isNaN(e.target.value) && e.target.value !== "" && e.target.value !== " ")
+                                    { setSession(session.substring(0, 2) + e.target.value + session.substring(3)) } else
+                                    { setSession(session.substring(0, 2) + "0" + session.substring(3)) }
+                                }}
+                                />
+                        <Input placeholder={"0"}
+                                color={"tomato"}
+                                id={"sessionFour"}
+                                type={"text"}
+                                maxLength={1}
+                                _placeholder={{color: "red.400"}}
+                                w={"45px"}
+                                focusBorderColor={"red.400"} 
+                                onChange={(e) => {
+                                    if (!isNaN(e.target.value) && e.target.value !== "" && e.target.value !== " ")
+                                    { setSession(session.substring(0, 3) + e.target.value) } else
+                                    { setSession(session.substring(0, 3) + "0") }
+                                }}
+                                />
+                    </Stack>
                     <Spacer/>
                     <Stack isInline>
                         <Button colorScheme={"red"} 
@@ -230,7 +284,7 @@ function MainComponent() {
                                             h={"77%"}>
                                                 {messageList.map((entry) => 
                                                 {
-                                                    return <ChatEntry color={color} username={username} message={entry} />
+                                                    return <ChatEntry userColor={color} username={username} message={entry} />
                                                 }
                                                 )}
                                         </Box>

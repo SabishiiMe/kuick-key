@@ -1,5 +1,5 @@
 import {
-    Image, Box, Stack, Heading, Flex
+    Image, Box, Stack, Heading, Flex, useColorModeValue
 } from '@chakra-ui/react'
 import Key from './key_Component';
 import {useState } from 'react';
@@ -8,6 +8,8 @@ function LeftPlayer(props) {
 
     // States
     const [score, setscore] = useState(0) 
+
+    const defaultTextColor = useColorModeValue("#1A202C", "white")
 
     return(
         <Box flex={2.5} 
@@ -58,11 +60,12 @@ function LeftPlayer(props) {
                     </Box>
                     <Box className={"PlayerInfoArea"}>
                         <Heading textAlign={"center"} 
-                                    className={"PlayerUsername"}>
+                                 className={"PlayerUsername"}
+                                 >
                             {props.username}
                         </Heading>
                         <Heading textAlign={"center"} 
-                                    className="PlayerScore">
+                                 className="PlayerScore">
                             {score}
                         </Heading>
                     </Box>
