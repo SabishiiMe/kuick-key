@@ -1,5 +1,5 @@
 import {
-    Image, Box, Stack, Heading
+    Image, Box, Stack, Heading, Flex
 } from '@chakra-ui/react'
 import Key from './key_Component';
 import {useState } from 'react';
@@ -7,13 +7,12 @@ import {useState } from 'react';
 function RightPlayer(props) {
 
     // States
-    const [userName, setUsername] = useState(props.username ? props.username : "No One") 
     const [score, setscore] = useState(0) 
 
     return(
         <Box flex={2.5} 
              h={"100vh"} 
-             className={"PlayerArea"} 
+             className={"PlayerArea"}
              pl={"5px"} 
              boxShadow={"inner"}
              bgImage={"game_Background.png"} 
@@ -22,15 +21,16 @@ function RightPlayer(props) {
                    mt={"5%"} 
                    mr={"5%"}>
                 <Stack ml={"auto"} h={"auto"} overflow={"hidden"} align={"center"}>
-                    <Box overflow={"hidden"} w={"80px"} h={"59vh"} className={"Keys"} >
-                        <Key letter={"Z"} />
-                        <Key letter={"G"} />
-                        <Key letter={"S"} />
-                        <Key letter={"B"} />
-                        <Key letter={"Q"} />
-                        <Key letter={"O"} />  
-                        <Key letter={"K"} />  
-                    </Box>
+                    <Flex border={"8px"} 
+                          borderColor={"red.400"} 
+                          borderRadius={"10px"} 
+                          p={"2px"} 
+                          flexDirection={"column-reverse"} 
+                          overflow={"hidden"} 
+                          h={"59vh"} 
+                          className={"Keys"} >
+                            
+                    </Flex>
                     <Box className={"CurrentKeyContainer"}>
                         <Image src={"current_Key_Box.png"} 
                                 alt={"Current Key Container"} />
@@ -38,10 +38,10 @@ function RightPlayer(props) {
                     <Box className={"PlayerInfoArea"}>
                         <Heading textAlign={"center"} 
                                     className={"PlayerUsername"}>
-                            {userName}
+                            {props.username}
                         </Heading>
                         <Heading textAlign={"center"} 
-                                    className="PlayerScore">
+                                    className={"PlayerScore"}>
                             {score}
                         </Heading>
                     </Box>

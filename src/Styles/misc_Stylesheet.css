@@ -1,0 +1,57 @@
+/* CSS for misc non-Chakra UI related styling */
+
+/* Animation Classes */
+.PlayerArea {
+    animation: scrollBG 20s linear infinite;
+}
+
+.LeftDivider {
+    animation: scrollDividers 8s linear infinite;
+}
+
+.RightDivider {
+    animation: scrollDividers 8s linear infinite reverse;
+}
+
+.FadeIn {
+    animation: fadeIn 2s linear normal forwards;
+}
+
+.FadeOut {
+    animation: fadeOut 2s linear normal forwards;
+}
+
+
+
+/* Animations */
+@keyframes fadeOut {
+    0% {
+        opacity: 100%;
+    }
+
+    100% {
+        opacity: 0%;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0%;
+    }
+
+    100% {
+        opacity: 100%;
+    }
+}
+
+@keyframes scrollBG {
+    100% {
+        background-position: 400px 400px;
+    }
+}
+
+@keyframes scrollDividers {
+    100% {
+        transform: translateY(-50%);
+    }
+}
