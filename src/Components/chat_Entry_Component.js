@@ -2,7 +2,7 @@ import { Stack, Text, useColorModeValue } from "@chakra-ui/react"
 
 
 function ChatEntry(props) {
-    const backgroundColor = useColorModeValue("white", "#1A202C")
+    const backgroundColor = useColorModeValue(props.pos % 2 ? "white" : "#ededed", props.pos % 2 ? "#1A202C" : "#171c26")
     const defaultTextColor = useColorModeValue("#1A202C", "white")
 
     return (

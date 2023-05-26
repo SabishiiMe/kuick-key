@@ -1,17 +1,26 @@
 import {
     Image, Box, Stack, Input, Button, Spacer, Flex, Table,
-    Thead, Tbody, Tr, Th, TableContainer, Heading, useColorModeValue
+    Thead, Tbody, Tr, Th, TableContainer, Heading, useColorModeValue, Grid, GridItem
 } from '@chakra-ui/react'
 import data from "../table_Temp_Data.json"
 import ColorModeButton from "./colorModeButton";
 import LeaderBoardEntry from './leaderboard_Entry_Component';
 import LeftPlayer from './player_Left_Component';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import RightPlayer from './player_Right_Component';
+import PlayerEntry from './player_Entry_Component';
 import ChatEntry from './chat_Entry_Component';
+import { io } from "socket.io-client"
 
-import "../Styles/misc_Stylesheet.css"
+import "../Styles/misc_Stylesheet.css" 
 
+
+const serverURL = "http://localhost:4312"
+
+
+// Socket IO
+// new socket for sicket IO
+const socket = io(serverURL).disconnect()
 
 // Main window component.
 function MainComponent() {
@@ -22,68 +31,86 @@ function MainComponent() {
 
     // States - User
     const [username, setUsername] = useState("No One")
-    const [color, setUserColor] = useState("Black")
+    const [color, setUserColor] = useState("")
     const [message, updateMessage] = useState("") 
     const [session, setSession] = useState("0000")
 
     // States - Lists
-    const [messageList, setMessageList] = useState([])
-    // const [userList, setuserList] = useState([])
+    const [messages, updateMessages] = useState([])
+    const [players, setPlayerList] = useState([])
 
     // States - Other
     const [menuHidden, setMenuHidden] = useState(false)
     const [gameHidden, setGameHidden] = useState(true)
 
+    const [leftUser, setLeftUser] = useState("")
 
     /**
      * This function will update the window states and display the game window.
      */
     function LoadGameScreen() {
-
         setGameHidden(false)
         setMenuHidden(true)
     }
-
 
     /**
      * This function will update the window states and display the main menu.
      */
     function LoadMainMenuScreen() {
-
         setGameHidden(true)
         setMenuHidden(false)
     }
 
     /**
-     * This function will halt the program for x number miliseconds.
-     * @param {*} time 
-     * @returns 
-     */
-    // function waitTime(time) {
-    //     return new Promise(r => setTimeout(r, time))
-    // }
-
-
-    /**
      * This function will append new messages to the messages list
      * @param {*} message 
      */
-    function AppendMessage(message) {
+    function CreateMessage(json) {
 
         // Clear input box
         document.getElementById("chatBox").value = ""
 
-        // If number of messages is greater than 50, will start to remove them.
-        if (messageList.length > 50)
-        {
-            const newMessageList = messageList
-            newMessageList.shift()
-            setMessageList(newMessageList)
-        }
+        updateMessages((list) => [...list, json])
+
+        // Send message to socket server
+        socket.emit("append-message", {username: json.username, color: json.color, message: json.message}, session)
+
+        // Clear the message state
+        updateMessage("")
+    }
+
+    /**
+     * Is called when the player recieves a message from another player.
+     * @param {*} json 
+     */
+    function ReceiveMessage(json) {
 
         // Append new message to message list.
-        setMessageList((list) => [...list, message])
+        updateMessages((list) => [...list, json])
     }
+
+    /**
+     * This function is called when the player presses the find session button in the main menu.
+     * It will join the player to the session defined on the menu screen.
+     */
+    function JoinSession() {
+        socket.emit("join-session", session)
+    }
+
+    socket.off("players-session").on("players-session", clients => {
+        if (clients == 1) {
+            console.log("HERE")
+            setLeftUser(username)
+        }
+    }) 
+
+    /**
+     * This socket function will listen for message broadcasts from the client.
+     * If it recieves one, updates the message list with the other users messages.
+     */
+    socket.off("broadcast-message").on("broadcast-message", json => {
+        ReceiveMessage(json)
+    })
 
     return (
         <Box position={"relative"} overflow={"hidden"} id={"Main"}>
@@ -184,7 +211,17 @@ function MainComponent() {
                         <Button colorScheme={"red"} 
                                 w={"2xs"}
                                 onClick={() => 
-                                    { LoadGameScreen() }}
+                                    { 
+                                        socket.connect()
+                                        // Clear any messages cached
+                                        updateMessages([])
+
+                                        // Join the player to the selected session
+                                        JoinSession()
+
+                                        // Switch to the game screen
+                                        LoadGameScreen() 
+                                    }}
                                 >
                             Find Game!
                         </Button>
@@ -233,7 +270,7 @@ function MainComponent() {
                   overflow={"hidden"}
                   borderColor={"red.400"}
                   >
-                <LeftPlayer username={username} />
+                <LeftPlayer username={leftUser} />
                 <Box flex={3} className={"MiddleArea"}>
                     <Flex>
                         <Flex flexDirection={"column"} className={"LeftDivider"}>
@@ -266,12 +303,24 @@ function MainComponent() {
                                     <Heading textAlign={"left"}>
                                         Players
                                     </Heading>
+                                    <Grid p={2}
+                                          templateColumns={"repeat(3, 1fr)"} 
+                                          templateRows={"repeat(3, 1fr)"} 
+                                          gap={2}>
+                                        <PlayerEntry id={"playerSlotOne"} />
+                                        <PlayerEntry id={"playerSlotTwo"} />
+                                        <PlayerEntry id={"playerSlotThree"} />
+                                        <PlayerEntry id={"playerSlotFour"} />
+                                        <PlayerEntry id={"playerSlotFive"} />
+                                        <PlayerEntry id={"playerSlotSix"} />
+                                        <PlayerEntry id={"playerSlotSeven"} />
+                                        <PlayerEntry id={"playerSlotEight"} />
+                                    </Grid>
                                 </Box>
                                 <Box className={"Chat"}
                                     background={backgroundColor}
-                                    w={"100%"}
+                                    w={"33vw"}
                                     h={"45vh"}
-                                    bottom={0}
                                     overflowY={"auto"}
                                     overflowX={"hidden"}
                                     boxShadow={"inner"}
@@ -282,11 +331,11 @@ function MainComponent() {
                                     bgSize={"30em"}>
                                         <Box id={"MessageArea"}
                                             h={"77%"}>
-                                                {messageList.map((entry) => 
-                                                {
-                                                    return <ChatEntry userColor={color} username={username} message={entry} />
-                                                }
-                                                )}
+                                               {
+                                                messages.map((entry, index) => {
+                                                    return <ChatEntry username={entry.username} userColor={entry.color} message={entry.message} pos={index} />
+                                                })
+                                               }
                                         </Box>
                                 </Box>
                                 <Stack isInline w={"100%"}>
@@ -303,13 +352,24 @@ function MainComponent() {
                                         on
                                         />
                                     <Button colorScheme={"red"}
-                                            onClick={ () => {AppendMessage(message)}} >
+                                            onClick={ () => {
+                                                if (message.length)
+                                                {
+                                                    CreateMessage({username: username, color: color, message: message})
+                                                }
+                                            }} >
                                         Enter
                                     </Button>
                                     <ColorModeButton />
                                     <Button colorScheme={"red"}
                                             onClick={() => 
-                                                { LoadMainMenuScreen() }}
+                                                { 
+                                                    // Disconnects the player from thier current session
+                                                    socket.disconnect()
+
+                                                    // Loads the main menu.
+                                                    LoadMainMenuScreen() 
+                                                }}
                                     >
                                         Main Menu
                                     </Button>
@@ -324,25 +384,6 @@ function MainComponent() {
                 </Box>
                 <RightPlayer username={"No One"} />
             </Flex>
-
-            {/* Loading Screen */}
-            {/* <Box hidden={true}
-                 id={"loadingScreen"}
-                 className={""}
-                 opacity={0}
-                 position={"relative"}
-                 w={"100%"}
-                 h={"100%"}
-                 >
-                <Image src={"loading_Screen.png"} 
-                       alt={"Background Image"} 
-                       position={"absolute"} 
-                       top={0} 
-                       left={0}
-                       w={"100%"}
-                       h={"100%"}
-                />
-            </Box> */}
 
             {/* Version Number */}
             <Box position={"fixed"}

@@ -6,10 +6,12 @@ import {useState } from 'react';
 
 function LeftPlayer(props) {
 
-    // States
-    const [score, setscore] = useState(0) 
-
     const defaultTextColor = useColorModeValue("#1A202C", "white")
+
+    // States
+    const [username, setUsername] = useState(props.username ? props.username : "No One")
+    const [score, setscore] = useState(0) 
+    const [keys, setKeys] = useState([])
 
     return(
         <Box flex={2.5} 
@@ -62,7 +64,7 @@ function LeftPlayer(props) {
                         <Heading textAlign={"center"} 
                                  className={"PlayerUsername"}
                                  >
-                            {props.username}
+                            {username}
                         </Heading>
                         <Heading textAlign={"center"} 
                                  className="PlayerScore">
