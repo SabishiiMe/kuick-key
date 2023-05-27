@@ -3,24 +3,24 @@ import {
     Thead, Tbody, Tr, Th, TableContainer, Heading, useColorModeValue, Grid, GridItem
 } from '@chakra-ui/react'
 import data from "../table_Temp_Data.json"
-import ColorModeButton from "./colorModeButton";
-import LeaderBoardEntry from './leaderboard_Entry_Component';
-import LeftPlayer from './player_Left_Component';
-import React, { useEffect, useState } from 'react';
-import RightPlayer from './player_Right_Component';
-import PlayerEntry from './player_Entry_Component';
-import ChatEntry from './chat_Entry_Component';
+import ColorModeButton from "./colorModeButton"
+import LeaderBoardEntry from './leaderboard_Entry_Component'
+import LeftPlayer from './player_Left_Component'
+import React, { useEffect, useState } from 'react'
+import RightPlayer from './player_Right_Component'
+import PlayerEntry from './player_Entry_Component'
+import ChatEntry from './chat_Entry_Component'
 import { io } from "socket.io-client"
-
 import "../Styles/misc_Stylesheet.css" 
-
-
-const serverURL = "http://localhost:4312"
-
 
 // Socket IO
 // new socket for sicket IO
-const socket = io(serverURL).disconnect()
+const serverURL = process.env.REACT_APP_SERVERURL
+const socket = io(serverURL, {
+    extraHeaders: {
+        "Access-Control-Allow-Origin": "*"
+    }
+}).disconnect()
 
 // Main window component.
 function MainComponent() {
@@ -42,8 +42,8 @@ function MainComponent() {
     // States - Other
     const [menuHidden, setMenuHidden] = useState(false)
     const [gameHidden, setGameHidden] = useState(true)
-
-    const [leftUser, setLeftUser] = useState("")
+    const [leaderboard, setLeaderboard] = useState([])
+    
 
     /**
      * This function will update the window states and display the game window.
@@ -97,13 +97,6 @@ function MainComponent() {
         socket.emit("join-session", session)
     }
 
-    socket.off("players-session").on("players-session", clients => {
-        if (clients == 1) {
-            console.log("HERE")
-            setLeftUser(username)
-        }
-    }) 
-
     /**
      * This socket function will listen for message broadcasts from the client.
      * If it recieves one, updates the message list with the other users messages.
@@ -111,6 +104,18 @@ function MainComponent() {
     socket.off("broadcast-message").on("broadcast-message", json => {
         ReceiveMessage(json)
     })
+
+    // Use effect when the component is first loaded
+    useEffect(() => {
+        fetch(serverURL + "/leaderboard", { mode: "cors", method: "GET"})
+        .then((response) => response.json())
+        .then((entries) => {
+            entries.sort((a,b) => (a.rank - b.rank))
+            setLeaderboard(entries)
+        })
+        
+
+    }, [])
 
     return (
         <Box position={"relative"} overflow={"hidden"} id={"Main"}>
@@ -251,7 +256,7 @@ function MainComponent() {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                              {data.map((entry) => <LeaderBoardEntry Rank={entry.Rank} Username={entry.Username} Score={entry.Score} />)}
+                              {leaderboard.map((entry, index) => <LeaderBoardEntry userColor={entry.color} Rank={entry.rank} Username={entry.username} Score={entry.score} key={"leaderboardEntry" + index} />)}
                             </Tbody>
                         </Table>
                     </TableContainer>
@@ -270,7 +275,7 @@ function MainComponent() {
                   overflow={"hidden"}
                   borderColor={"red.400"}
                   >
-                <LeftPlayer username={leftUser} />
+                <LeftPlayer username={"No One"} />
                 <Box flex={3} className={"MiddleArea"}>
                     <Flex>
                         <Flex flexDirection={"column"} className={"LeftDivider"}>
@@ -333,7 +338,7 @@ function MainComponent() {
                                             h={"77%"}>
                                                {
                                                 messages.map((entry, index) => {
-                                                    return <ChatEntry username={entry.username} userColor={entry.color} message={entry.message} pos={index} />
+                                                    return <ChatEntry username={entry.username} userColor={entry.color} message={entry.message} pos={index} key={"message" + index} />
                                                 })
                                                }
                                         </Box>

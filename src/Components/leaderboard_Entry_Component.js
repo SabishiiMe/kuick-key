@@ -6,10 +6,14 @@ function LeaderBoardEntry(props) {
     const SX = props.Rank === 1 ? {
         textAlign: "center",
         fontWeight: "bold",
+        color: props.userColor,
+        textShadow: "1px 1px black"
     }
     : {
         textAlign: "center",
         fontWeight: "normal",
+        color: props.userColor,
+        textShadow: "1px 1px black"
     }
 
     return (

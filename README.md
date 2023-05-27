@@ -109,6 +109,11 @@ Clone the newest release of the program from [Github](https://github.com/Sabishi
 
 Now open your web development IDE of your choice and navigate to the cloned project directory.
 
+Open the .env in each of the cloned folders and fill in the values for CLIENTURL and REACT_APP_SERVERURL with each **app engines deployed address**.
+
+![Google Cloud app engine address example image](./public/README/Installation_Steps/1clone.png)
+
+
 Finally you can run the following commands inside the cloned directory:
 
 ```
@@ -123,6 +128,15 @@ gcloud app deploy
 
 *Deploying the application may take some time.*
 
+
+## 3. Toubleshooting
+
+If when performing API calls you get a ```Could not load the default credentials``` error, open the **Google CLI**, navigate to the server directory on your computer, and run the follow command:
+``` 
+gloud auth application-default login
+``` 
+
+You may also have to create a **firewall port** for the **server** app engine to allow access to port **65080**. This can be done by going to **networking** > **VPC network** > **firewall** and selecting **Create Firewall Rule** 
 
 ## Tech Stack
 
