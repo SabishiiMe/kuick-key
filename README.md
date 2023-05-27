@@ -6,7 +6,7 @@
 
 # Getting Started
 
-You can navigate to [Kuick Key](kuick-key.ca) to play the currently deployed Kuick Key.
+You can navigate to [kuick-key.ca](https://kuick-key.ca) to play the currently deployed Kuick Key.
 
 *Note: This game is only playable on desktop.*
 
