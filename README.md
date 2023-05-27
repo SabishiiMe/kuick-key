@@ -51,7 +51,7 @@ After completing a game, your score is compared to the current top **five** scor
 
 # How to Deploy
 
-## 1. Create a new Google Cloud Project
+## 1. Create Two new Google Cloud Projects
 
 Log into your google account and navigate to [Google Cloud](https://cloud.google.com).
 
@@ -62,9 +62,11 @@ You can now create a new project by clicking the New Project Button located on t
 ![Create new project instructional Image](./public/README/Installation_Steps/1newProject.png)
 ![Create new project instructional Image](./public/README/Installation_Steps/2newProject.png)
 
+Do this one more time for the Kuick-Keys **Server**.
+
 <br />
 
-## 2. Initialize a new Application Engine
+## 2. Initialize Two new Application Engines
 
 Next you will want to navigate to the [App Engine](https://console.cloud.google.com/appengine/start) item in from your **Google Cloud bashboard**. You can find this item by clicking on the **hamburger** icon on the **top right** of your Google Cloud window
 
@@ -87,6 +89,8 @@ Step one is to set up the **region** and **service account** if you have a servi
 
 Step two is to select the **language** the application will use and to download the **cloud SDK**. For the language you will want to pick **Node.js**.
 
+*Make sure to do all these steps again for your server.*
+
 You also will need to download and install the **Google Cloud SDK** from the link on the same page. 
 
 Install the CLI with all **default options**. This download might take some time, this is **normal**.
@@ -105,21 +109,23 @@ And done! Your google cloud app engine is set up and its time to grab the progra
 
 ## 3. Clone & Configure the Kuick Key Program
 
-Clone the newest release of the program from [Github](https://github.com/SabishiiMe/kuick-key.git)
+Clone the newest releases of the client and server programs from [Github - Client](https://github.com/SabishiiMe/kuick-key.git) and [Github - Server](https://github.com/SabishiiMe/Kuick-Key-Server.git)
 
-Now open your web development IDE of your choice and navigate to the cloned project directory.
+Now open your web development IDE of your choice and navigate to the cloned project directories.
 
 Open the .env in each of the cloned folders and fill in the values for CLIENTURL and REACT_APP_SERVERURL with each **app engines deployed address**.
 
 ![Google Cloud app engine address example image](./public/README/Installation_Steps/1clone.png)
 
 
-Finally you can run the following commands inside the cloned directory:
+Finally you can run the following commands inside each of the cloned directories:
 
 ```
 npm install
 
 gcloud init
+
+npm run build (FOR CLIENT ONLY)
 
 gcloud app deploy
 ```
@@ -140,6 +146,6 @@ You may also have to create a **firewall port** for the **server** app engine to
 
 ## Tech Stack
 
-**Client:** [React](https://react.dev), [React Router](https://reactrouter.com/en/main), [Chakra UI](https://chakra-ui.com), 
+**Client:** [React](https://react.dev), [Chakra UI](https://chakra-ui.com), [Socket.IO](https://socket.io)
 
-**Server:** [Node js](https://nodejs.org/en), [Google Cloud](https://cloud.google.com)
+**Server:** [Node js](https://nodejs.org/en), [Google Cloud](https://cloud.google.com), [Express](https://expressjs.com), [Socket.IO](https://socket.io)
